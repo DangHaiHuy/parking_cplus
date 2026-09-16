@@ -5,4 +5,4 @@ namespace ParkingApplication {
 int run(int argc, char *argv[]);
 }
 
-#endif // PARKING_APPLICATION_H
+#endif

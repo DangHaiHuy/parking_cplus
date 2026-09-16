@@ -6,17 +6,19 @@
 #include <filesystem>
 #include <iostream>
 
+using namespace std;
+
 Logger &Logger::getInstance() {
     static Logger instance;
     return instance;
 }
 
 Logger::Logger() {
-    std::error_code error;
-    std::filesystem::create_directories("logs", error);
-    logFile.open("logs/system.log", std::ios::app);
+    error_code error;
+    filesystem::create_directories("logs", error);
+    logFile.open("logs/system.log", ios::app);
     if (!logFile.is_open()) {
-        std::cerr << "[Logger] Khong the mo file logs/system.log de ghi.\n";
+        cerr << "[Logger] Khong the mo file logs/system.log de ghi.\n";
     }
 }
 
@@ -26,36 +28,36 @@ Logger::~Logger() {
     }
 }
 
-std::string Logger::currentTimestamp() {
-    return TimeUtils::formatTimestamp(std::time(nullptr));
+string Logger::currentTimestamp() {
+    return TimeUtils::formatTimestamp(time(nullptr));
 }
 
-void Logger::writeLine(const std::string &level, const std::string &message) {
-    std::lock_guard<std::mutex> lock(logMutex);
-    const std::string line = "[" + currentTimestamp() + "] [" + level + "] " + message;
+void Logger::writeLine(const string &level, const string &message) {
+    lock_guard<mutex> lock(logMutex);
+    string line = "[" + currentTimestamp() + "] [" + level + "] " + message;
     if (logFile.is_open()) {
-        logFile << line << std::endl;
+        logFile << line << endl;
     }
-    std::cout << line << std::endl;
+    cout << line << endl;
 }
 
-void Logger::logEntry(const std::string &vehicleId, int slotId) {
-    writeLine("ENTRY", "Vehicle " + vehicleId + " occupied slot P" + std::to_string(slotId));
+void Logger::logEntry(const string &vehicleId, int slotId) {
+    writeLine("ENTRY", "Vehicle " + vehicleId + " occupied slot P" + to_string(slotId));
 }
 
-void Logger::logExit(const std::string &vehicleId, int slotId, long parkedSeconds) {
-    writeLine("EXIT", "Vehicle " + vehicleId + " left slot P" + std::to_string(slotId) +
-                          " after " + std::to_string(parkedSeconds) + "s");
+void Logger::logExit(const string &vehicleId, int slotId, long parkedSeconds) {
+    writeLine("EXIT", "Vehicle " + vehicleId + " left slot P" + to_string(slotId) +
+                          " after " + to_string(parkedSeconds) + "s");
 }
 
-void Logger::logBarrier(const std::string &barrierName, const std::string &state) {
+void Logger::logBarrier(const string &barrierName, const string &state) {
     writeLine("BARRIER", barrierName + " -> " + state);
 }
 
-void Logger::logError(const std::string &message) {
+void Logger::logError(const string &message) {
     writeLine("ERROR", message);
 }
 
-void Logger::logInfo(const std::string &message) {
+void Logger::logInfo(const string &message) {
     writeLine("INFO", message);
 }
