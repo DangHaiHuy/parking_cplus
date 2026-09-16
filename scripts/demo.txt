@@ -1,0 +1,8 @@
+# WAIT uses milliseconds. AUTO generates sensor events.
+ENTRY 51A-12345
+WAIT 1100
+STATUS
+EXIT 51A-12345
+AUTO 5
+STATUS
+QUIT
