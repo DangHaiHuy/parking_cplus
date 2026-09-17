@@ -1,6 +1,1 @@
-[2026-09-17 20:14:07 UTC+07:00] [ERROR] Xe ra khong hop le: khong tim thay vehicle 1 trong bai.
-[2026-09-17 20:14:45 UTC+07:00] [BARRIER] Entry Barrier -> OPENING
-[2026-09-17 20:14:46 UTC+07:00] [BARRIER] Entry Barrier -> OPEN
-[2026-09-17 20:14:47 UTC+07:00] [ENTRY] Vehicle 51a-123123 occupied slot P2
-[2026-09-17 20:14:47 UTC+07:00] [BARRIER] Entry Barrier -> CLOSING
-[2026-09-17 20:14:48 UTC+07:00] [BARRIER] Entry Barrier -> CLOSED
+
