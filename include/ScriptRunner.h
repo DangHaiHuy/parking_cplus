@@ -2,6 +2,7 @@
 #define SCRIPT_RUNNER_H
 
 #include "AutoSensor.h"
+#include "ParkingController.h"
 
 #include <iosfwd>
 #include <string>
