@@ -6,33 +6,50 @@
 
 using namespace std;
 
-Barrier::Barrier(const string& name) : name(name), open(false) {}
+Barrier::Barrier(const string& name) : name(name), state(BarrierState::CLOSED) {}
 
 void sleepMs(int ms) {
     clock_t start = clock();
     while ((clock() - start) * 1000 / CLOCKS_PER_SEC < ms);
 }
 
-void Barrier::raise() {
-    if (open) return;
+void Barrier::open() {
+    if (state == BarrierState::OPEN)
+        return;
     Logger::getInstance().logBarrier(name, "OPENING...");
     sleepMs(Config::BARRIER_MOVEMENT_MS);
-    open = true;
+    state = BarrierState::CLOSED;
     Logger::getInstance().logBarrier(name, "OPENED");
 }
 
-void Barrier::lower() {
-    if (!open) return;
+void Barrier::close() {
+    if (state == BarrierState::CLOSED)
+        return;
     Logger::getInstance().logBarrier(name, "CLOSING...");
     sleepMs(Config::BARRIER_MOVEMENT_MS);
-    open = false;
+    state = BarrierState::OPEN;
     Logger::getInstance().logBarrier(name, "CLOSED");
 }
 
-string Barrier::stateToString(){
-    return open ? "OPEN" : "CLOSED";
+string Barrier::stateToString() {
+    switch (state) {
+        case BarrierState::CLOSED:  
+            return "CLOSED";
+        case BarrierState::OPENING: 
+            return "OPENING";
+        case BarrierState::OPEN:    
+            return "OPEN";
+        case BarrierState::CLOSING: 
+            return "CLOSING";
+    }
+    return "UNKNOWN";
 }
 
-bool Barrier::isOpen(){
-    return open;
+string Barrier::getName(){
+    return name;
 }
+
+BarrierState Barrier::getState(){ 
+    return state; 
+}
+

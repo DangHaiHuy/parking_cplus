@@ -3,19 +3,27 @@
 
 #include <string>
 
+enum class BarrierState {
+    CLOSED,
+    OPENING,
+    OPEN,
+    CLOSING
+};
+
 class Barrier {
 public:
     Barrier(const std::string& name);
 
-    void raise();
-    void lower();
+    void open();
+    void close();
 
+    BarrierState getState();
+    std::string getName();
     std::string stateToString();
-    bool isOpen();
 
 private:
     std::string name;
-    bool open;
+    BarrierState state;
 };
 
 #endif // BARRIER_H
