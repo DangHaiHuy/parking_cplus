@@ -33,7 +33,7 @@ long ParkingSlot::getParkedSeconds(){
     return static_cast<long>(difftime(time(nullptr), entryTime));
 }
 
-bool ParkingSlot::occupy(string& vid) {
+bool ParkingSlot::occupy(const string& vid) {
     if (!isFree()) return false;
     this->vehicleId = vid;
     this->status = SlotStatus::OCCUPIED;

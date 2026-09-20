@@ -22,7 +22,7 @@ public:
     time_t getEntryTime() const;
     long getParkedSeconds();
 
-    bool occupy(string& vehicleId);
+    bool occupy(const string& vehicleId);
     long release();
 
     string toDisplayString() const;
