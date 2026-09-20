@@ -20,7 +20,7 @@ public:
     bool isFree() const;
     const string& getVehicleId() const;
     time_t getEntryTime() const;
-    long getParkedSeconds();
+    long getParkedSeconds() const;
 
     bool occupy(const string& vehicleId);
     long release();

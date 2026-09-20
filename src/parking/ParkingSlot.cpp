@@ -28,7 +28,7 @@ time_t ParkingSlot::getEntryTime() const {
     return entryTime;
 }
 
-long ParkingSlot::getParkedSeconds(){
+long ParkingSlot::getParkedSeconds() const{
     if (status == SlotStatus::FREE) return 0;
     return static_cast<long>(difftime(time(nullptr), entryTime));
 }

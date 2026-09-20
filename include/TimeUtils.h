@@ -9,7 +9,7 @@ using namespace std;
 class TimeUtils {
 public:
     TimeUtils();
-    string formatTimestamp(time_t timestamp);
+    static string formatTimestamp(time_t timestamp);
 };
 
 #endif // TIME_UTILS_H
