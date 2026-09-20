@@ -28,7 +28,7 @@ time_t ParkingSlot::getEntryTime() const {
     return entryTime;
 }
 
-long ParkingSlot::getParkedSeconds(){
+long ParkingSlot::getParkedSeconds() const {
     if (status == SlotStatus::FREE) return 0;
     return static_cast<long>(difftime(time(nullptr), entryTime));
 }
@@ -38,6 +38,7 @@ bool ParkingSlot::occupy(const string& vid) {
     this->vehicleId = vid;
     this->status = SlotStatus::OCCUPIED;
     this->entryTime = time(nullptr);
+    return true;
 }
 
 long ParkingSlot::release() {
@@ -51,8 +52,19 @@ long ParkingSlot::release() {
     return parkedSeconds;
 }
 
-string ParkingSlot::toDisplayString() const{
+string ParkingSlot::toDisplayString() const {
+    const size_t MAX_ID_SHOWN = 9;              
+    const size_t CELL_WIDTH = 5 + MAX_ID_SHOWN + 1; 
+
     string idStr = (id < 10 ? "0" : "") + to_string(id);
-    string stringStatus = (status == SlotStatus::FREE) ? " " : "X";
-    return "P" + idStr + " [" + stringStatus + "]";
+
+    
+    string label = isFree() ? " " : vehicleId;
+    if (label.size() > MAX_ID_SHOWN) {
+        label = label.substr(0, MAX_ID_SHOWN);
+    }
+
+    string cell = "P" + idStr + " [" + label + "]";
+    cell.resize(CELL_WIDTH, ' ');   
+    return cell;
 }

@@ -117,4 +117,29 @@ int ParkingController::getWaitingQueueSize() const {
     return waitingQueue.size();
 }
 
+ExitResult ParkingController::handleVehicleExit(const std::string& rawVehicleId) {
+    std::optional<std::string> idOpt = exitSensor.detectVehicle(rawVehicleId);
+    if (!idOpt.has_value()) {
+        Logger::getInstance().logError("Exit sensor: input khong hop le: '" + rawVehicleId + "'");
+        return ExitResult::REJECTED_INVALID_INPUT;
+    }
+    const std::string vehicleId = *idOpt;
 
+    int index = findSlotIndexByVehicle(vehicleId);
+    if (index == -1) {
+        Logger::getInstance().logError("Vehicle " + vehicleId + " khong co trong bai.");
+        return ExitResult::REJECTED_VEHICLE_NOT_FOUND;
+    }
+
+    exitBarrier.open();
+    std::this_thread::sleep_for(std::chrono::milliseconds(Config::VEHICLE_PASSAGE_MS));
+    int slotId = slots[index].getId();
+    long parkedSeconds = slots[index].release();
+    vehicleToSlot.erase(vehicleId);
+    Logger::getInstance().logExit(vehicleId, slotId, parkedSeconds);
+    exitBarrier.close();
+
+    validateInvariants();
+    admitFromQueueIfPossible();   // cho xe đang chờ vào nếu có chỗ trống
+    return ExitResult::SUCCESS;
+}

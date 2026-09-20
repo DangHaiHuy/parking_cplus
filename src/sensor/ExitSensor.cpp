@@ -1,5 +1,5 @@
 #include "ExitSensor.h"
-
+#include <cctype>
 bool ExitSensor::isValidVehicleId(const std::string &id)
 {
     // Ma xe phai co tu 1 den 20 ky tu.
@@ -29,11 +29,11 @@ bool ExitSensor::isValidVehicleId(const std::string &id)
     return true;
 }
 
-std::string ExitSensor::detectVehicle(const std::string &rawVehicleId) const
+std::optional<std::string> ExitSensor::detectVehicle(const std::string &rawVehicleId) const
 {
     if (!isValidVehicleId(rawVehicleId))
     {
-        return "";
+        return std::nullopt;
     }
 
     return rawVehicleId;

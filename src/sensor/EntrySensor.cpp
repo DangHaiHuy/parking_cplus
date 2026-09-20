@@ -30,11 +30,10 @@ bool EntrySensor::isValidVehicleId(const std::string &id)
     return true;
 }
 
-std::string EntrySensor::detectVehicle(const std::string &rawVehicleId) const
-{
+std::optional<std::string> EntrySensor::detectVehicle(const std::string &rawVehicleId) const{
     if (!isValidVehicleId(rawVehicleId))
     {
-        return "";
+        return std::nullopt;
     }
 
     return rawVehicleId;
