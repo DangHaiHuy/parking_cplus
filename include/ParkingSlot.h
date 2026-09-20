@@ -3,27 +3,33 @@
 
 #include <string>
 #include <ctime>
-
+#include <chrono>
 using namespace std;
+
+enum class SlotStatus {
+    FREE,
+    OCCUPIED
+};
 
 class ParkingSlot {
 public:
     ParkingSlot(int id);
 
     int getId();
+    SlotStatus getStatus();
     bool isFree();
     string& getVehicleId();
     time_t getEntryTime();
     long getParkedSeconds();
 
-    void occupy(string& vehicleId);
-    void free();
+    bool occupy(string& vehicleId);
+    long release();
 
     string toDisplayString();
 
 private:
     int id;
-    bool statusIsFree;
+    SlotStatus status;
     string vehicleId;
     time_t entryTime;
 };

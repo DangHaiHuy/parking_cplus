@@ -5,14 +5,14 @@
 
 using namespace std;
 
-ParkingSlot::ParkingSlot(int id) : id(id), statusIsFree(true), entryTime(0) {}
+ParkingSlot::ParkingSlot(int id) : id(id), status(SlotStatus::FREE), vehicleId(""), entryTime(0) {}
 
 int ParkingSlot::getId(){
     return id;
 }
 
 bool ParkingSlot::isFree(){
-    return statusIsFree;
+    return status == SlotStatus::FREE;
 }
 
 string& ParkingSlot::getVehicleId(){
@@ -24,24 +24,30 @@ time_t ParkingSlot::getEntryTime() {
 }
 
 long ParkingSlot::getParkedSeconds(){
-    if (statusIsFree) return 0;
+    if (status == SlotStatus::FREE) return 0;
     return static_cast<long>(difftime(time(nullptr), entryTime));
 }
 
-void ParkingSlot::occupy(string& vid) {
+bool ParkingSlot::occupy(string& vid) {
+    if (!isFree()) return false;
     this->vehicleId = vid;
-    this->statusIsFree = false;
+    this->status = SlotStatus::OCCUPIED;
     this->entryTime = time(nullptr);
 }
 
-void ParkingSlot::free() {
-    this->vehicleId.clear();
-    this->statusIsFree = true;
-    this->entryTime = 0;
+long ParkingSlot::release() {
+    if (status == SlotStatus::FREE) {
+        return -1;
+    }
+    long parkedSeconds = getParkedSeconds();
+    status = SlotStatus::FREE;
+    vehicleId.clear();
+    entryTime = 0;
+    return parkedSeconds;
 }
 
 string ParkingSlot::toDisplayString(){
     string idStr = (id < 10 ? "0" : "") + to_string(id);
-    string status = statusIsFree ? " " : "X";
-    return "P" + idStr + " [" + status + "]";
+    string stringStatus = (status == SlotStatus::FREE) ? " " : "X";
+    return "P" + idStr + " [" + stringStatus + "]";
 }
