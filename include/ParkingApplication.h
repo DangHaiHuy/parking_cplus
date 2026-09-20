@@ -2,7 +2,7 @@
 #define PARKING_APPLICATION_H
 
 namespace ParkingApplication {
-int run(int argc, char *argv[]);
+    int run(int argc, char* argv[]);
 }
 
 #endif

@@ -1,8 +1,6 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
-#include <fstream>
-#include <mutex>
 #include <string>
 
 class Logger {
@@ -10,16 +8,9 @@ private:
     Logger();
 
     void writeLine(const std::string& level, const std::string& message);
-    static std::string currentTimestamp();
-
-    std::ofstream logFile;
-    std::mutex logMutex;
 
 public:
     static Logger& getInstance();
-
-    Logger(const Logger&) = delete;
-    Logger& operator=(const Logger&) = delete;
 
     void logEntry(const std::string& vehicleId, int slotId);
     void logExit(const std::string& vehicleId, int slotId, long parkedSeconds);
