@@ -1,23 +1,41 @@
 #include "EntrySensor.h"
-#include <algorithm>
 #include <cctype>
 
 bool EntrySensor::isValidVehicleId(const std::string &id)
 {
-    if (id.empty() || id.size() > 20)
+    // Ma xe phai co tu 1 den 20 ky tu.
+    if (id.empty())
     {
         return false;
     }
-    // Chá»‰ cháº¥p nháº­n chá»¯, sá»‘ vÃ  dáº¥u gáº¡ch ngang/gáº¡ch dÆ°á»›i (vd: "51A-12345").
-    return std::all_of(id.begin(), id.end(), [](unsigned char c)
-                       { return std::isalnum(c) || c == '-' || c == '_'; });
+
+    if (id.size() > 20)
+    {
+        return false;
+    }
+
+    // Chi chap nhan chu, so, dau '-' va dau '_'.
+    for (char character : id)
+    {
+        bool isLetterOrNumber = std::isalnum(character);
+        bool isDash = character == '-';
+        bool isUnderscore = character == '_';
+
+        if (!isLetterOrNumber && !isDash && !isUnderscore)
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
-std::optional<std::string> EntrySensor::detectVehicle(const std::string &rawVehicleId) const
+std::string EntrySensor::detectVehicle(const std::string &rawVehicleId) const
 {
     if (!isValidVehicleId(rawVehicleId))
     {
-        return std::nullopt;
+        return "";
     }
+
     return rawVehicleId;
 }
