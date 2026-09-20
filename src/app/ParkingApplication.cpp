@@ -1,5 +1,4 @@
 #include "ParkingApplication.h"
-
 #include "AutoSensor.h"
 #include "Config.h"
 #include "Display.h"
@@ -15,158 +14,257 @@ using namespace std;
 
 namespace {
 
+// Hien thi huong dan
+void showHelp() {
+    cout << "Usage: smart_parking [--auto N | --script FILE] [--interval MS]\n";
+    cout << "--auto N      Tao N su kien xe tu dong.\n";
+    cout << "--script FILE Doc lenh tu file script.\n";
+    cout << "--interval MS Thoi gian giua cac xe tu dong.\n";
+}
+
+// Doc lua chon tu menu
 int readMenuChoice() {
-    string line;
-    if (!getline(cin, line)) {
+    string text;
+    int choice;
+
+    if (!getline(cin, text)) {
         return 0;
     }
 
-    int choice = -1;
-    return parseNonNegativeInt(line, choice) ? choice : -1;
+    if (!parseNonNegativeInt(text, choice)) {
+        return -1;
+    }
+
+    return choice;
 }
 
-string readVehicleId(const string &prompt) {
-    cout << prompt;
+// Doc Vehicle ID
+string readVehicleId(const string& message) {
     string vehicleId;
+
+    cout << message;
     getline(cin, vehicleId);
+
     return vehicleId;
 }
 
-void printEntryResult(EntryResult result, const string &vehicleId) {
-    switch (result) {
-    case EntryResult::SUCCESS:
+// Hien thi ket qua xe vao
+void showEntryResult(EntryResult result, const string& vehicleId) {
+    if (result == EntryResult::SUCCESS) {
         cout << "-> Xe " << vehicleId << " da vao bai thanh cong.\n";
-        break;
-    case EntryResult::REJECTED_FULL:
-        cout << "-> PARKING FULL. Xe " << vehicleId << " duoc xep vao hang cho.\n";
-        break;
-    case EntryResult::REJECTED_INVALID_INPUT:
+    }
+    else if (result == EntryResult::REJECTED_FULL) {
+        cout << "-> PARKING FULL. Xe " << vehicleId
+             << " duoc xep vao hang cho.\n";
+    }
+    else if (result == EntryResult::REJECTED_INVALID_INPUT) {
         cout << "-> Input khong hop le, tu choi xu ly.\n";
-        break;
-    case EntryResult::REJECTED_DUPLICATE_VEHICLE:
+    }
+    else {
         cout << "-> Vehicle ID nay da co trong bai.\n";
-        break;
     }
 }
 
-void printExitResult(ExitResult result, const string &vehicleId) {
-    switch (result) {
-    case ExitResult::SUCCESS:
+// Hien thi ket qua xe ra
+void showExitResult(ExitResult result, const string& vehicleId) {
+    if (result == ExitResult::SUCCESS) {
         cout << "-> Xe " << vehicleId << " da roi bai thanh cong.\n";
-        break;
-    case ExitResult::REJECTED_INVALID_INPUT:
+    }
+    else if (result == ExitResult::REJECTED_INVALID_INPUT) {
         cout << "-> Input khong hop le, tu choi xu ly.\n";
-        break;
-    case ExitResult::REJECTED_VEHICLE_NOT_FOUND:
-        cout << "-> Khong tim thay xe " << vehicleId
-             << " trong bai (co the bai dang trong).\n";
-        break;
+    }
+    else {
+        cout << "-> Khong tim thay xe " << vehicleId << " trong bai.\n";
     }
 }
 
-} // namespace
-
-int ParkingApplication::run(int argc, char *argv[]) {
-    int autoCount = -1;
-    int intervalMs = Config::AUTO_INTERVAL_MS;
-    string scriptPath;
-
-    for (int i = 1; i < argc; ++i) {
-        string option = argv[i];
-        if (option == "--help") {
-            cout << "Usage: smart_parking [--auto N | --script FILE] [--interval MS]\n"
-                 << "N: number of sensor events; MS: delay between auto events (default 500).\n"
-                 << "Script: ENTRY id, EXIT id, STATUS, WAIT ms, AUTO n, QUIT.\n";
-            return 0;
-        }
-
-        if ((option != "--auto" && option != "--script" && option != "--interval") ||
-            i + 1 == argc) {
-            cerr << "Invalid/missing option: " << option << ". Use --help.\n";
-            return 1;
-        }
-
-        string value = argv[++i];
-        if (option == "--script") {
-            if (!scriptPath.empty() || value.empty()) {
-                cerr << "Invalid/duplicate --script\n";
-                return 1;
-            }
-            scriptPath = value;
-            continue;
-        }
-
-        int parsed = 0;
-        if (!parseNonNegativeInt(value, parsed) ||
-            (option == "--auto" && autoCount >= 0)) {
-            cerr << "Invalid value for " << option << ": " << value << '\n';
-            return 1;
-        }
-        if (option == "--auto") {
-            autoCount = parsed;
-        } else {
-            intervalMs = parsed;
-        }
-    }
-
-    if (autoCount >= 0 && !scriptPath.empty()) {
-        cerr << "Use either --auto or --script.\n";
-        return 1;
-    }
-
-    ifstream script;
-    if (!scriptPath.empty()) {
-        script.open(scriptPath);
-        if (!script) {
-            cerr << "Cannot open script: " << scriptPath << '\n';
-            return 1;
-        }
-    }
-
-    ParkingController controller(Config::DEFAULT_TOTAL_SLOTS);
-    Logger::getInstance().logInfo("He thong Smart Parking khoi dong voi " +
-                                  to_string(Config::DEFAULT_TOTAL_SLOTS) + " slot.");
-
-    if (autoCount >= 0 || !scriptPath.empty()) {
-        AutoSensor sensor;
-        bool success = true;
-        if (autoCount >= 0) {
-            sensor.run(controller, autoCount, intervalMs);
-        } else {
-            success = runScript(script, controller, sensor, intervalMs, cerr);
-        }
-        Display::showStatus(controller);
-        Logger::getInstance().logInfo("He thong Smart Parking dung.");
-        return success ? 0 : 1;
-    }
-
+// Xu ly menu
+void runMenu(ParkingController& controller) {
     bool running = true;
+
     while (running) {
         Display::showMenu();
-        switch (readMenuChoice()) {
+
+        int choice = readMenuChoice();
+
+        switch (choice) {
         case 1: {
-            string vehicleId = readVehicleId("Nhap Vehicle ID (vd: 51A-12345): ");
-            printEntryResult(controller.handleVehicleEntry(vehicleId), vehicleId);
+            string vehicleId =
+                readVehicleId("Nhap Vehicle ID (vd : 28H-0001): ");
+
+            EntryResult result =
+                controller.handleVehicleEntry(vehicleId);
+
+            showEntryResult(result, vehicleId);
             break;
         }
+
         case 2: {
-            string vehicleId = readVehicleId("Nhap Vehicle ID can ra: ");
-            printExitResult(controller.handleVehicleExit(vehicleId), vehicleId);
+            string vehicleId =
+                readVehicleId("Nhap Vehicle ID can ra: ");
+
+            ExitResult result =
+                controller.handleVehicleExit(vehicleId);
+
+            showExitResult(result, vehicleId);
             break;
         }
+
         case 3:
             Display::showStatus(controller);
             break;
+
         case 0:
             running = false;
             cout << "Tam biet!\n";
             break;
+
         default:
             cout << "-> Lua chon khong hop le, vui long chon lai.\n";
             break;
         }
     }
+}
 
-    Logger::getInstance().logInfo("He thong Smart Parking dung.");
+} // namespace
+
+
+int ParkingApplication::run(int argc, char* argv[]) {
+
+    int autoCount = -1;
+    int intervalMs = Config::AUTO_INTERVAL_MS;
+    string scriptPath;
+
+    // Doc tham so khi chay chuong trinh
+    for (int i = 1; i < argc; ++i) {
+
+        string option = argv[i];
+
+        if (option == "--help") {
+            showHelp();
+            return 0;
+        }
+
+        if (i + 1 == argc) {
+            cerr << "Thieu gia tri cho " << option << '\n';
+            return 1;
+        }
+
+        string value = argv[++i];
+
+        if (option == "--auto") {
+
+            if (autoCount >= 0 ||
+                !parseNonNegativeInt(value, autoCount)) {
+
+                cerr << "Gia tri --auto khong hop le.\n";
+                return 1;
+            }
+
+        }
+        else if (option == "--script") {
+
+            if (!scriptPath.empty() || value.empty()) {
+
+                cerr << "Duong dan script khong hop le.\n";
+                return 1;
+            }
+
+            scriptPath = value;
+        }
+        else if (option == "--interval") {
+
+            if (!parseNonNegativeInt(value, intervalMs)) {
+
+                cerr << "Gia tri --interval khong hop le.\n";
+                return 1;
+            }
+
+        }
+        else {
+
+            cerr << "Lua chon khong hop le: " << option << '\n';
+            return 1;
+        }
+    }
+
+    if (autoCount >= 0 && !scriptPath.empty()) {
+        cerr << "Chi dung --auto hoac --script.\n";
+        return 1;
+    }
+
+    // Mo file script neu co
+    ifstream script;
+
+    if (!scriptPath.empty()) {
+
+        script.open(scriptPath);
+
+        if (!script.is_open()) {
+            cerr << "Khong mo duoc script: "
+                 << scriptPath << '\n';
+
+            return 1;
+        }
+    }
+
+    // Tao he thong bai do xe
+    ParkingController controller(
+        Config::DEFAULT_TOTAL_SLOTS
+    );
+
+    Logger::getInstance().logInfo(
+        "He thong Smart Parking khoi dong voi " +
+        to_string(Config::DEFAULT_TOTAL_SLOTS) +
+        " slot."
+    );
+    // CHAY CHE DO AUTO
+    if (autoCount >= 0) {
+
+        AutoSensor sensor;
+
+        sensor.run(
+            controller,
+            autoCount,
+            intervalMs
+        );
+
+        Display::showStatus(controller);
+    }
+
+    // CHAY CHE DO SCRIPT
+    else if (!scriptPath.empty()) {
+
+        AutoSensor sensor;
+
+        bool success = runScript(
+            script,
+            controller,
+            sensor,
+            intervalMs,
+            cerr
+        );
+
+        Display::showStatus(controller);
+
+        Logger::getInstance().logInfo(
+            "He thong Smart Parking dung."
+        );
+
+        if (!success) {
+            return 1;
+        }
+    }
+    // CHAY CHE DO MENU
+    else {
+        runMenu(controller);
+    }
+
+
+    // Ket thuc chuong trinh
+    Logger::getInstance().logInfo(
+        "He thong Smart Parking dung."
+    );
+
     return 0;
 }
