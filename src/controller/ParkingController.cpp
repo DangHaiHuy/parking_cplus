@@ -10,10 +10,10 @@ ParkingController::ParkingController(int totalSlots): entryBarrier("Entry Barrie
     }
 }
 
-int ParkingController::findFreeSlotIndex() const{
-    for (int i = 0; i < slots.size(); ++i) {
+int ParkingController::findFreeSlotIndex() const {
+    for (size_t i = 0; i < slots.size(); ++i) {
         if (slots[i].isFree()) {
-            return i;
+            return static_cast<int>(i);
         }
     }
     return -1;
