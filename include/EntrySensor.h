@@ -6,13 +6,13 @@
 
 class EntrySensor
 {
+private:
+    static bool isValidVehicleId(const std::string &id);
+
 public:
     EntrySensor() = default;
 
     std::optional<std::string> detectVehicle(const std::string &rawVehicleId) const;
-
-private:
-    static bool isValidVehicleId(const std::string &id);
 };
 
 #endif // ENTRY_SENSOR_H
