@@ -19,7 +19,7 @@ public:
 
     BarrierState getState();
     std::string getName();
-    std::string stateToString();
+    std::string stateToString() const;
 
 private:
     std::string name;

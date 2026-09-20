@@ -15,17 +15,17 @@ class ParkingSlot {
 public:
     ParkingSlot(int id);
 
-    int getId();
-    SlotStatus getStatus();
-    bool isFree();
-    string& getVehicleId();
-    time_t getEntryTime();
+    int getId() const;
+    SlotStatus getStatus() const;
+    bool isFree() const;
+    const string& getVehicleId() const;
+    time_t getEntryTime() const;
     long getParkedSeconds();
 
     bool occupy(string& vehicleId);
     long release();
 
-    string toDisplayString();
+    string toDisplayString() const;
 
 private:
     int id;

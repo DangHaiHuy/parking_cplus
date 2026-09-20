@@ -7,19 +7,24 @@ using namespace std;
 
 ParkingSlot::ParkingSlot(int id) : id(id), status(SlotStatus::FREE), vehicleId(""), entryTime(0) {}
 
-int ParkingSlot::getId(){
+int ParkingSlot::getId() const {
     return id;
 }
 
-bool ParkingSlot::isFree(){
+bool ParkingSlot::isFree() const {
     return status == SlotStatus::FREE;
 }
 
-string& ParkingSlot::getVehicleId(){
+const string& ParkingSlot::getVehicleId() const{
     return vehicleId;
 }
 
-time_t ParkingSlot::getEntryTime() {
+SlotStatus ParkingSlot::getStatus() const{
+    return status;
+};
+
+
+time_t ParkingSlot::getEntryTime() const {
     return entryTime;
 }
 
@@ -46,7 +51,7 @@ long ParkingSlot::release() {
     return parkedSeconds;
 }
 
-string ParkingSlot::toDisplayString(){
+string ParkingSlot::toDisplayString() const{
     string idStr = (id < 10 ? "0" : "") + to_string(id);
     string stringStatus = (status == SlotStatus::FREE) ? " " : "X";
     return "P" + idStr + " [" + stringStatus + "]";

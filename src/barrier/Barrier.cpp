@@ -31,7 +31,7 @@ void Barrier::close() {
     Logger::getInstance().logBarrier(name, "CLOSED");
 }
 
-string Barrier::stateToString() {
+string Barrier::stateToString() const{
     switch (state) {
         case BarrierState::CLOSED:  
             return "CLOSED";
