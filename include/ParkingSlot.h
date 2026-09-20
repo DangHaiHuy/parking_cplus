@@ -17,12 +17,12 @@ public:
 
     int getId();
     SlotStatus getStatus();
-    bool isFree();
+    bool isFree() const;
     string& getVehicleId();
     time_t getEntryTime();
     long getParkedSeconds();
 
-    bool occupy(string& vehicleId);
+    bool occupy(const string& vehicleId);
     long release();
 
     string toDisplayString();
