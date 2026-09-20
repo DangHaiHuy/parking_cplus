@@ -15,52 +15,78 @@ using namespace std;
 
 namespace {
 
-int readMenuChoice() {
-    string line;
-    if (!getline(cin, line)) {
-        return 0;
-    }
-
-    int choice = -1;
-    return parseNonNegativeInt(line, choice) ? choice : -1;
+void showHelp() {
+    cout << "Usage: smart_parking [--auto N | --script FILE] [--interval MS]\n";
+    cout << "--auto N      Tao N su kien xe tu dong.\n";
+    cout << "--script FILE Doc lenh tu file script.\n";
+    cout << "--interval MS Thoi gian giua cac xe tu dong.\n";
 }
 
-string readVehicleId(const string &prompt) {
-    cout << prompt;
+int readMenuChoice() {
+    string text;
+    int choice = -1;
+
+    if (!getline(cin, text)) {
+        return 0;
+    }
+    if (!parseNonNegativeInt(text, choice)) {
+        return -1;
+    }
+    return choice;
+}
+
+string readVehicleId(const string &message) {
     string vehicleId;
+    cout << message;
     getline(cin, vehicleId);
     return vehicleId;
 }
 
-void printEntryResult(EntryResult result, const string &vehicleId) {
-    switch (result) {
-    case EntryResult::SUCCESS:
+void showEntryResult(EntryResult result, const string &vehicleId) {
+    if (result == EntryResult::SUCCESS) {
         cout << "-> Xe " << vehicleId << " da vao bai thanh cong.\n";
-        break;
-    case EntryResult::REJECTED_FULL:
+    } else if (result == EntryResult::REJECTED_FULL) {
         cout << "-> PARKING FULL. Xe " << vehicleId << " duoc xep vao hang cho.\n";
-        break;
-    case EntryResult::REJECTED_INVALID_INPUT:
+    } else if (result == EntryResult::REJECTED_INVALID_INPUT) {
         cout << "-> Input khong hop le, tu choi xu ly.\n";
-        break;
-    case EntryResult::REJECTED_DUPLICATE_VEHICLE:
+    } else {
         cout << "-> Vehicle ID nay da co trong bai.\n";
-        break;
     }
 }
 
-void printExitResult(ExitResult result, const string &vehicleId) {
-    switch (result) {
-    case ExitResult::SUCCESS:
+void showExitResult(ExitResult result, const string &vehicleId) {
+    if (result == ExitResult::SUCCESS) {
         cout << "-> Xe " << vehicleId << " da roi bai thanh cong.\n";
-        break;
-    case ExitResult::REJECTED_INVALID_INPUT:
+    } else if (result == ExitResult::REJECTED_INVALID_INPUT) {
         cout << "-> Input khong hop le, tu choi xu ly.\n";
-        break;
-    case ExitResult::REJECTED_VEHICLE_NOT_FOUND:
-        cout << "-> Khong tim thay xe " << vehicleId
-             << " trong bai (co the bai dang trong).\n";
-        break;
+    } else {
+        cout << "-> Khong tim thay xe " << vehicleId << " trong bai.\n";
+    }
+}
+
+void runMenu(ParkingController &controller) {
+    bool running = true;
+
+    while (running) {
+        Display::showMenu();
+        int choice = readMenuChoice();
+
+        if (choice == 1) {
+            string vehicleId = readVehicleId("Nhap Vehicle ID (vd: 51A-12345): ");
+            EntryResult result = controller.handleVehicleEntry(vehicleId);
+            showEntryResult(result, vehicleId);
+        } else if (choice == 2) {
+            string vehicleId = readVehicleId("Nhap Vehicle ID can ra: ");
+            ExitResult result = controller.handleVehicleExit(vehicleId);
+            showExitResult(result, vehicleId);
+        } else if (choice == 3) {
+            Display::showStatus(controller);
+        } else if (choice == 0) {
+            running = false;
+            cout << "Tam biet!\n";
+        } else {
+            cout << "-> Lua chon khong hop le, vui long chon lai.\n";
+        }
     }
 }
 
@@ -73,52 +99,51 @@ int ParkingApplication::run(int argc, char *argv[]) {
 
     for (int i = 1; i < argc; ++i) {
         string option = argv[i];
+
         if (option == "--help") {
-            cout << "Usage: smart_parking [--auto N | --script FILE] [--interval MS]\n"
-                 << "N: number of sensor events; MS: delay between auto events (default 500).\n"
-                 << "Script: ENTRY id, EXIT id, STATUS, WAIT ms, AUTO n, QUIT.\n";
+            showHelp();
             return 0;
         }
 
-        if ((option != "--auto" && option != "--script" && option != "--interval") ||
-            i + 1 == argc) {
-            cerr << "Invalid/missing option: " << option << ". Use --help.\n";
+        if (i + 1 == argc) {
+            cerr << "Thieu gia tri cho " << option << '\n';
             return 1;
         }
 
         string value = argv[++i];
-        if (option == "--script") {
+
+        if (option == "--auto") {
+            if (autoCount >= 0 || !parseNonNegativeInt(value, autoCount)) {
+                cerr << "Gia tri --auto khong hop le.\n";
+                return 1;
+            }
+        } else if (option == "--script") {
             if (!scriptPath.empty() || value.empty()) {
-                cerr << "Invalid/duplicate --script\n";
+                cerr << "Duong dan script khong hop le.\n";
                 return 1;
             }
             scriptPath = value;
-            continue;
-        }
-
-        int parsed = 0;
-        if (!parseNonNegativeInt(value, parsed) ||
-            (option == "--auto" && autoCount >= 0)) {
-            cerr << "Invalid value for " << option << ": " << value << '\n';
-            return 1;
-        }
-        if (option == "--auto") {
-            autoCount = parsed;
+        } else if (option == "--interval") {
+            if (!parseNonNegativeInt(value, intervalMs)) {
+                cerr << "Gia tri --interval khong hop le.\n";
+                return 1;
+            }
         } else {
-            intervalMs = parsed;
+            cerr << "Lua chon khong hop le: " << option << '\n';
+            return 1;
         }
     }
 
     if (autoCount >= 0 && !scriptPath.empty()) {
-        cerr << "Use either --auto or --script.\n";
+        cerr << "Chi dung --auto hoac --script.\n";
         return 1;
     }
 
     ifstream script;
     if (!scriptPath.empty()) {
         script.open(scriptPath);
-        if (!script) {
-            cerr << "Cannot open script: " << scriptPath << '\n';
+        if (!script.is_open()) {
+            cerr << "Khong mo duoc script: " << scriptPath << '\n';
             return 1;
         }
     }
@@ -127,44 +152,22 @@ int ParkingApplication::run(int argc, char *argv[]) {
     Logger::getInstance().logInfo("He thong Smart Parking khoi dong voi " +
                                   to_string(Config::DEFAULT_TOTAL_SLOTS) + " slot.");
 
-    if (autoCount >= 0 || !scriptPath.empty()) {
+    if (autoCount >= 0) {
         AutoSensor sensor;
-        bool success = true;
-        if (autoCount >= 0) {
-            sensor.run(controller, autoCount, intervalMs);
-        } else {
-            success = runScript(script, controller, sensor, intervalMs, cerr);
-        }
+        sensor.run(controller, autoCount, intervalMs);
+        Display::showStatus(controller);
+    } else if (!scriptPath.empty()) {
+        AutoSensor sensor;
+        bool success = runScript(script, controller, sensor, intervalMs, cerr);
         Display::showStatus(controller);
         Logger::getInstance().logInfo("He thong Smart Parking dung.");
-        return success ? 0 : 1;
-    }
 
-    bool running = true;
-    while (running) {
-        Display::showMenu();
-        switch (readMenuChoice()) {
-        case 1: {
-            string vehicleId = readVehicleId("Nhap Vehicle ID (vd: 51A-12345): ");
-            printEntryResult(controller.handleVehicleEntry(vehicleId), vehicleId);
-            break;
+        if (success) {
+            return 0;
         }
-        case 2: {
-            string vehicleId = readVehicleId("Nhap Vehicle ID can ra: ");
-            printExitResult(controller.handleVehicleExit(vehicleId), vehicleId);
-            break;
-        }
-        case 3:
-            Display::showStatus(controller);
-            break;
-        case 0:
-            running = false;
-            cout << "Tam biet!\n";
-            break;
-        default:
-            cout << "-> Lua chon khong hop le, vui long chon lai.\n";
-            break;
-        }
+        return 1;
+    } else {
+        runMenu(controller);
     }
 
     Logger::getInstance().logInfo("He thong Smart Parking dung.");

@@ -22,12 +22,6 @@ Logger::Logger() {
     }
 }
 
-Logger::~Logger() {
-    if (logFile.is_open()) {
-        logFile.close();
-    }
-}
-
 string Logger::currentTimestamp() {
     return TimeUtils::formatTimestamp(time(nullptr));
 }

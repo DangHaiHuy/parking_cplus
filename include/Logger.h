@@ -6,6 +6,15 @@
 #include <string>
 
 class Logger {
+private:
+    Logger();
+
+    void writeLine(const std::string& level, const std::string& message);
+    static std::string currentTimestamp();
+
+    std::ofstream logFile;
+    std::mutex logMutex;
+
 public:
     static Logger& getInstance();
 
@@ -17,16 +26,6 @@ public:
     void logBarrier(const std::string& barrierName, const std::string& state);
     void logError(const std::string& message);
     void logInfo(const std::string& message);
-
-private:
-    Logger();
-    ~Logger();
-
-    void writeLine(const std::string& level, const std::string& message);
-    static std::string currentTimestamp();
-
-    std::ofstream logFile;
-    std::mutex logMutex;
 };
 
 #endif
