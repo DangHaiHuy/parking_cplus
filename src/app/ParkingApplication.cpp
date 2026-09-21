@@ -90,7 +90,7 @@ void runMenu(ParkingController& controller) {
         switch (choice) {
         case 1: {
             string vehicleId =
-                readVehicleId("Nhap Vehicle ID (vd : 28H-0001): ");
+                readVehicleId("Nhap Vehicle ID (vd : 30A-123.45): ");
 
             EntryResult result =
                 controller.handleVehicleEntry(vehicleId);
