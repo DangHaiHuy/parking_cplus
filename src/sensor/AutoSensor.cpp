@@ -17,7 +17,6 @@ void AutoSensor::run(ParkingController &controller, int count, int intervalMs)
 
     for (int i = 0; i < count; ++i)
     {
-        // Lan dau chay ngay. Cac lan sau moi doi theo intervalMs.
         if (i > 0)
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(intervalMs));
@@ -50,14 +49,24 @@ void AutoSensor::run(ParkingController &controller, int count, int intervalMs)
         }
         else
         {
-            // Tao ma xe moi va dam bao ma nay chua co trong bai.
-            std::string vehicleId = "AUTO-" + std::to_string(nextVehicle);
+            std::uint64_t plateSequence = nextVehicle - 1;
+            char series = static_cast<char>('A' + (plateSequence / 99999) % 26);
+            std::uint64_t serialNumber = plateSequence % 99999 + 1;
+            std::string serial = std::to_string(serialNumber);
+            serial.insert(0, 5 - serial.size(), '0');
+            serial.insert(3, 1, '.');
+            std::string vehicleId = "30" + std::string(1, series) + "-" + serial;
             nextVehicle++;
 
-            // Neu ma xe nay da co trong bai, tao ma moi cho den khi khong trung.
             while (std::find(parked.begin(), parked.end(), vehicleId) != parked.end())
             {
-                vehicleId = "AUTO-" + std::to_string(nextVehicle);
+                plateSequence = nextVehicle - 1;
+                series = static_cast<char>('A' + (plateSequence / 99999) % 26);
+                serialNumber = plateSequence % 99999 + 1;
+                serial = std::to_string(serialNumber);
+                serial.insert(0, 5 - serial.size(), '0');
+                serial.insert(3, 1, '.');
+                vehicleId = "30" + std::string(1, series) + "-" + serial;
                 nextVehicle++;
             }
 
