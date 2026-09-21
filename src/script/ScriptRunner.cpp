@@ -1,6 +1,7 @@
 #include "ScriptRunner.h"
 #include "Display.h"
 #include "EntrySensor.h"
+#include "ExitSensor.h"
 
 #include <chrono>
 #include <iostream>
@@ -9,13 +10,12 @@
 
 using namespace std;
 
-
 // Hien thi loi khi script sai
 bool showScriptError(
-    ostream& errors,
+    ostream &errors,
     int lineNumber,
-    const string& line
-) {
+    const string &line)
+{
     errors << "Script line "
            << lineNumber
            << ": invalid command: "
@@ -25,55 +25,59 @@ bool showScriptError(
     return false;
 }
 
-
 // Chuyen chuoi thanh so nguyen khong am
 bool parseNonNegativeInt(
-    const string& value,
-    int& result
-) {
-    if (value.empty()) {
+    const string &value,
+    int &result)
+{
+    if (value.empty())
+    {
         return false;
     }
 
     stringstream input(value);
 
-    if (!(input >> result)) {
+    if (!(input >> result))
+    {
         return false;
     }
 
-    if (result < 0) {
+    if (result < 0)
+    {
         return false;
     }
 
     // Kiem tra xem sau so con ky tu thua hay khong
     char extra;
 
-    if (input >> extra) {
+    if (input >> extra)
+    {
         return false;
     }
 
     return true;
 }
 
-
 // Chay cac lenh trong file script
 bool runScript(
-    istream& input,
-    ParkingController& controller,
-    AutoSensor& sensor,
+    istream &input,
+    ParkingController &controller,
+    AutoSensor &sensor,
     int intervalMs,
-    ostream& errors
-) {
+    ostream &errors)
+{
     string line;
     int lineNumber = 0;
 
-    while (getline(input, line)) {
+    while (getline(input, line))
+    {
 
         lineNumber++;
 
         // Bo BOM o dau file neu co
         if (lineNumber == 1 &&
-            line.compare(0, 3, "\xEF\xBB\xBF") == 0) {
+            line.compare(0, 3, "\xEF\xBB\xBF") == 0)
+        {
 
             line.erase(0, 3);
         }
@@ -81,7 +85,8 @@ bool runScript(
         // Bo phan comment sau dau #
         size_t comment = line.find('#');
 
-        if (comment != string::npos) {
+        if (comment != string::npos)
+        {
             line.erase(comment);
         }
 
@@ -95,30 +100,32 @@ bool runScript(
         words >> command;
 
         // Dong trong
-        if (command.empty()) {
+        if (command.empty())
+        {
             continue;
         }
 
         words >> argument;
 
         // Kiem tra co tham so thu 2 hay khong
-        if (words >> extra) {
+        if (words >> extra)
+        {
             return showScriptError(
                 errors,
                 lineNumber,
-                line
-            );
+                line);
         }
 
         // LENH ENTRY
-        if (command == "ENTRY") {
+        if (command == "ENTRY")
+        {
 
-            if (!EntrySensor{}.detectVehicle(argument).has_value()) {
+            if (!EntrySensor{}.detectVehicle(argument).has_value())
+            {
                 return showScriptError(
                     errors,
                     lineNumber,
-                    line
-                );
+                    line);
             }
 
             controller.handleVehicleEntry(argument);
@@ -126,14 +133,15 @@ bool runScript(
             continue;
         }
         // LENH EXIT
-        if (command == "EXIT") {
+        if (command == "EXIT")
+        {
 
-            if (!EntrySensor{}.detectVehicle(argument).has_value()) {
+            if (!ExitSensor{}.detectVehicle(argument).has_value())
+            {
                 return showScriptError(
                     errors,
                     lineNumber,
-                    line
-                );
+                    line);
             }
 
             controller.handleVehicleExit(argument);
@@ -142,14 +150,15 @@ bool runScript(
         }
 
         // LENH STATUS
-        if (command == "STATUS") {
+        if (command == "STATUS")
+        {
 
-            if (!argument.empty()) {
+            if (!argument.empty())
+            {
                 return showScriptError(
                     errors,
                     lineNumber,
-                    line
-                );
+                    line);
             }
 
             Display::showStatus(controller);
@@ -157,56 +166,57 @@ bool runScript(
             continue;
         }
         // LENH WAIT
-        if (command == "WAIT") {
+        if (command == "WAIT")
+        {
 
             int milliseconds;
 
-            if (!parseNonNegativeInt(argument, milliseconds)) {
+            if (!parseNonNegativeInt(argument, milliseconds))
+            {
                 return showScriptError(
                     errors,
                     lineNumber,
-                    line
-                );
+                    line);
             }
 
             this_thread::sleep_for(
-                chrono::milliseconds(milliseconds)
-            );
+                chrono::milliseconds(milliseconds));
 
             continue;
         }
         // LENH AUTO
-        if (command == "AUTO") {
+        if (command == "AUTO")
+        {
 
             int numberOfVehicles;
 
-            if (!parseNonNegativeInt(argument, numberOfVehicles)) {
+            if (!parseNonNegativeInt(argument, numberOfVehicles))
+            {
                 return showScriptError(
                     errors,
                     lineNumber,
-                    line
-                );
+                    line);
             }
 
             sensor.run(
                 controller,
                 numberOfVehicles,
-                intervalMs
-            );
+                intervalMs);
 
             continue;
         }
 
         // LENH QUIT
 
-        if (command == "QUIT") {
+        if (command == "QUIT")
+        {
 
-            if (!argument.empty()) {
+            if (!argument.empty())
+            {
                 return showScriptError(
                     errors,
                     lineNumber,
-                    line
-                );
+                    line);
             }
 
             return true;
@@ -216,12 +226,12 @@ bool runScript(
         return showScriptError(
             errors,
             lineNumber,
-            line
-        );
+            line);
     }
 
     // Kiem tra loi doc file
-    if (input.bad()) {
+    if (input.bad())
+    {
         errors << "Script read error\n";
         return false;
     }

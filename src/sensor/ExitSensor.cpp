@@ -2,25 +2,62 @@
 #include <cctype>
 bool ExitSensor::isValidVehicleId(const std::string &id)
 {
-    // Ma xe phai co tu 1 den 20 ky tu.
-    if (id.empty())
+    // Dinh dang bien so o to Viet Nam: 28H-0001, 30A-12345 hoac 30F-256.58.
+    if (id.size() < 8 || id.size() > 10)
     {
         return false;
     }
 
-    if (id.size() > 20)
+    // Hai chu so dau la ma tinh/thanh pho da duoc cap bien so.
+    if (!std::isdigit(static_cast<unsigned char>(id[0])) ||
+        !std::isdigit(static_cast<unsigned char>(id[1])))
     {
         return false;
     }
 
-    // Kiem tra tung ky tu trong ma xe.
-    for (char character : id)
-    {
-        bool isLetterOrNumber = std::isalnum(character);
-        bool isDash = character == '-';
-        bool isUnderscore = character == '_';
+    int provinceCode = (id[0] - '0') * 10 + (id[1] - '0');
+    bool isValidProvinceCode =
+        (provinceCode >= 11 && provinceCode <= 12) ||
+        (provinceCode >= 14 && provinceCode <= 38) ||
+        provinceCode == 43 ||
+        (provinceCode >= 47 && provinceCode <= 79) ||
+        (provinceCode >= 81 && provinceCode <= 86) ||
+        (provinceCode >= 88 && provinceCode <= 90) ||
+        (provinceCode >= 92 && provinceCode <= 95) ||
+        (provinceCode >= 97 && provinceCode <= 99);
 
-        if (!isLetterOrNumber && !isDash && !isUnderscore)
+    if (!isValidProvinceCode)
+    {
+        return false;
+    }
+
+    if (!std::isupper(static_cast<unsigned char>(id[2])) || id[3] != '-')
+    {
+        return false;
+    }
+
+    // Chap nhan 4 so cu, 5 so lien nhau hoac 5 so theo dang 123.45.
+    if (id.size() == 10)
+    {
+        if (id[7] != '.')
+        {
+            return false;
+        }
+
+        for (std::size_t i = 4; i < id.size(); ++i)
+        {
+            if (i != 7 && !std::isdigit(static_cast<unsigned char>(id[i])))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    for (std::size_t i = 4; i < id.size(); ++i)
+    {
+        if (!std::isdigit(static_cast<unsigned char>(id[i])))
         {
             return false;
         }
