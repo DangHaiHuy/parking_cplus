@@ -120,8 +120,8 @@ doc/                     Tài liệu yêu cầu và sơ đồ
 
 ## Tài liệu
 
-- [Yêu cầu hệ thống](doc/Requriement.md)
-- [Sơ đồ khối](doc/blockdiagram.jpg)
-- [Sơ đồ trạng thái xe vào](doc/state_xe_vao.jpg)
-- [Sơ đồ trạng thái xe ra](doc/state_xe_ra.jpg)
+- [Yêu cầu hệ thống](docs/Requriement.md)
+- [Sơ đồ khối](docs/blockdiagram.jpg)
+- [Sơ đồ trạng thái xe vào](docs/state_xe_vao.jpg)
+- [Sơ đồ trạng thái xe ra](docs/state_xe_ra.jpg)
 
