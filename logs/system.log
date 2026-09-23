@@ -385,3 +385,59 @@
 [EXIT] Vehicle 30A-88896 left slot P8 after 72s
 [INFO] Co cho trong, moi xe dang cho: 30A-88899
 [ERROR] Vehicle 30A-88899 da co trong bai (tranh occupy trung).
+[INFO] He thong Smart Parking khoi dong voi 10 slot.
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 30A-000.01 occupied slot P1
+[BARRIER] Exit Barrier -> OPENING...
+[BARRIER] Exit Barrier -> OPENED
+[EXIT] Vehicle 30A-000.01 left slot P1 after 3s
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 30A-000.02 occupied slot P1
+[BARRIER] Exit Barrier -> OPENING...
+[BARRIER] Exit Barrier -> OPENED
+[EXIT] Vehicle 30A-000.02 left slot P1 after 3s
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 30A-000.03 occupied slot P1
+[BARRIER] Exit Barrier -> OPENING...
+[BARRIER] Exit Barrier -> OPENED
+[EXIT] Vehicle 30A-000.03 left slot P1 after 3s
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 30A-000.04 occupied slot P1
+[BARRIER] Exit Barrier -> OPENING...
+[BARRIER] Exit Barrier -> OPENED
+[EXIT] Vehicle 30A-000.04 left slot P1 after 3s
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 30A-000.05 occupied slot P1
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 30A-000.06 occupied slot P2
+[INFO] He thong Smart Parking dung.
+[INFO] He thong Smart Parking khoi dong voi 10 slot.
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 51A-12345 occupied slot P1
+[BARRIER] Exit Barrier -> OPENING...
+[BARRIER] Exit Barrier -> OPENED
+[EXIT] Vehicle 51A-12345 left slot P1 after 3s
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 30A-000.01 occupied slot P1
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 30A-000.02 occupied slot P2
+[BARRIER] Exit Barrier -> OPENING...
+[BARRIER] Exit Barrier -> OPENED
+[EXIT] Vehicle 30A-000.01 left slot P1 after 5s
+[BARRIER] Exit Barrier -> OPENING...
+[BARRIER] Exit Barrier -> OPENED
+[EXIT] Vehicle 30A-000.02 left slot P2 after 5s
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 30A-000.03 occupied slot P1
+[INFO] He thong Smart Parking dung.
+[INFO] He thong Smart Parking dung.
