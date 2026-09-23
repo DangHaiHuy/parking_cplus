@@ -53,7 +53,7 @@ long ParkingSlot::release() {
 }
 
 string ParkingSlot::toDisplayString() const {
-    const size_t MAX_ID_SHOWN = 9;              
+    const size_t MAX_ID_SHOWN = 10;
     const size_t CELL_WIDTH = 5 + MAX_ID_SHOWN + 1; 
 
     string idStr = (id < 10 ? "0" : "") + to_string(id);

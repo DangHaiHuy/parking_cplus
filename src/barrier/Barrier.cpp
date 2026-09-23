@@ -16,18 +16,20 @@ void sleepMs(int ms) {
 void Barrier::open() {
     if (state == BarrierState::OPEN)
         return;
+    state = BarrierState::OPENING;
     Logger::getInstance().logBarrier(name, "OPENING...");
     sleepMs(Config::BARRIER_MOVEMENT_MS);
-    state = BarrierState::CLOSED;
+    state = BarrierState::OPEN;
     Logger::getInstance().logBarrier(name, "OPENED");
 }
 
 void Barrier::close() {
     if (state == BarrierState::CLOSED)
         return;
+    state = BarrierState::CLOSING;
     Logger::getInstance().logBarrier(name, "CLOSING...");
     sleepMs(Config::BARRIER_MOVEMENT_MS);
-    state = BarrierState::OPEN;
+    state = BarrierState::CLOSED;
     Logger::getInstance().logBarrier(name, "CLOSED");
 }
 
