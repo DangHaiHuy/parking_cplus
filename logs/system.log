@@ -255,3 +255,133 @@
 [EXIT] Vehicle 30A-000.01 left slot P1 after 8s
 [INFO] He thong Smart Parking dung.
 [INFO] He thong Smart Parking dung.
+[INFO] He thong Smart Parking khoi dong voi 10 slot.
+[ERROR] Entry sensor: input khong hop le: 'F27839'
+[ERROR] Entry sensor: input khong hop le: '29LD-29180'
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 18A-0298 occupied slot P1
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 28D-19213 occupied slot P2
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 88E-929.10 occupied slot P3
+[ERROR] Entry sensor: input khong hop le: '30N2-596.12'
+[INFO] He thong Smart Parking dung.
+[INFO] He thong Smart Parking khoi dong voi 10 slot.
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 30A-123.45 occupied slot P1
+[BARRIER] Exit Barrier -> OPENING...
+[BARRIER] Exit Barrier -> OPENED
+[EXIT] Vehicle 30A-123.45 left slot P1 after 2s
+[ERROR] Entry sensor: input khong hop le: '11W-292'
+[ERROR] Entry sensor: input khong hop le: '29X-999999'
+[ERROR] Entry sensor: input khong hop le: '1S-2039'
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 18A-0298 occupied slot P1
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 18A-02980 occupied slot P2
+[BARRIER] Exit Barrier -> OPENING...
+[BARRIER] Exit Barrier -> OPENED
+[EXIT] Vehicle 18A-0298 left slot P1 after 2769s
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 18A-0298 occupied slot P1
+[ERROR] Vehicle 18A-0298 da co trong bai (tranh occupy trung).
+[ERROR] Vehicle 19Z-99999 khong co trong bai.
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 19Z-99999 occupied slot P3
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 19Z-99990 occupied slot P4
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 19Z-99991 occupied slot P5
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 19Z-99992 occupied slot P6
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 19Z-99993 occupied slot P7
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 19Z-99994 occupied slot P8
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 19Z-99995 occupied slot P9
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 19Z-99996 occupied slot P10
+[INFO] PARKING FULL - tu choi xe 19Z-99997
+[INFO] PARKING FULL - tu choi xe 19Z-99997
+[INFO] PARKING FULL - tu choi xe 19Z-99997
+[BARRIER] Exit Barrier -> OPENING...
+[BARRIER] Exit Barrier -> OPENED
+[EXIT] Vehicle 18A-0298 left slot P1 after 2287s
+[INFO] Co cho trong, moi xe dang cho: 19Z-99997
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 19Z-99997 occupied slot P1
+[BARRIER] Exit Barrier -> OPENING...
+[BARRIER] Exit Barrier -> OPENED
+[EXIT] Vehicle 19Z-99999 left slot P3 after 81s
+[INFO] Co cho trong, moi xe dang cho: 19Z-99997
+[ERROR] Vehicle 19Z-99997 da co trong bai (tranh occupy trung).
+[INFO] He thong Smart Parking khoi dong voi 10 slot.
+[ERROR] Entry sensor: input khong hop le: '80A-99988'
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 30A-88889 occupied slot P1
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 30A-88890 occupied slot P2
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 30A-88891 occupied slot P3
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 30A-88892 occupied slot P4
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 30A-88893 occupied slot P5
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 30A-88894 occupied slot P6
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 30A-88895 occupied slot P7
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 30A-88896 occupied slot P8
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 30A-88897 occupied slot P9
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 30A-88898 occupied slot P10
+[INFO] PARKING FULL - tu choi xe 30A-88899
+[INFO] PARKING FULL - tu choi xe 30A-88899
+[INFO] PARKING FULL - tu choi xe 30A-88899
+[BARRIER] Exit Barrier -> OPENING...
+[BARRIER] Exit Barrier -> OPENED
+[EXIT] Vehicle 30A-88897 left slot P9 after 32s
+[INFO] Co cho trong, moi xe dang cho: 30A-88899
+[BARRIER] Entry Barrier -> OPENING...
+[BARRIER] Entry Barrier -> OPENED
+[ENTRY] Vehicle 30A-88899 occupied slot P9
+[BARRIER] Exit Barrier -> OPENING...
+[BARRIER] Exit Barrier -> OPENED
+[EXIT] Vehicle 30A-88898 left slot P10 after 42s
+[INFO] Co cho trong, moi xe dang cho: 30A-88899
+[ERROR] Vehicle 30A-88899 da co trong bai (tranh occupy trung).
+[ERROR] Vehicle 30A-88898 khong co trong bai.
+[BARRIER] Exit Barrier -> OPENING...
+[BARRIER] Exit Barrier -> OPENED
+[EXIT] Vehicle 30A-88896 left slot P8 after 72s
+[INFO] Co cho trong, moi xe dang cho: 30A-88899
+[ERROR] Vehicle 30A-88899 da co trong bai (tranh occupy trung).
